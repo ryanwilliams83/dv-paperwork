@@ -1,0 +1,7 @@
+/.vs/
+/bin/
+/obj/
+/dv
+.idea/
+Directory.Build.targets
+*.DotSettings.user

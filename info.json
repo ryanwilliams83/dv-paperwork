@@ -1,0 +1,11 @@
+{
+  "Id": "Paperwork",
+  "DisplayName": "Paperwork",
+  "Author": "Ryan williams",
+  "Version": "0.9.1",
+  "AssemblyName": "Paperwork.dll",
+  "EntryMethod": "DvMod.Paperwork.Main.Load",
+  "ManagerVersion": "0.27.3",
+  "HomePage": "https://github.com/ryanwilliams83/dv-paperwork",
+  "Repository": "https://raw.githubusercontent.com/ryanwilliams83/dv-paperwork/main/resources/repository.json"
+}

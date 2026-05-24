@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <RootNamespace>DvMod.Paperwork</RootNamespace>
+    <InformationalVersion>0.9.1</InformationalVersion>
+  </PropertyGroup>
+    <ItemGroup>
+    <Content Include="info.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Krafs.Publicizer" Version="2.2.1" />
+    <Publicize Include="Assembly-CSharp" IncludeCompilerGeneratedMembers="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="0Harmony" />
+    <Reference Include="Assembly-CSharp" />
+    <Reference Include="DV.Inventory" />
+    <Reference Include="DV.ThingTypes" />
+    <Reference Include="DV.Utils" />
+    <Reference Include="UnityEngine.CoreModule" />
+    <Reference Include="UnityModManager" />
+    <Reference Include="WorldStreamer" />
+  </ItemGroup>
+</Project>
