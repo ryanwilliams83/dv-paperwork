@@ -5,7 +5,7 @@ using HarmonyLib;
 namespace DvMod.Paperwork.Patches
 {
     [HarmonyPatch(typeof(Trainset))]
-    public static class TrainsetPatchPatch
+    public static class TrainsetPatch
     {
         [HarmonyPatch(typeof(Trainset), nameof(Trainset.Merge))]
         [HarmonyPostfix]

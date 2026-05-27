@@ -6,11 +6,17 @@
     <RootNamespace>DvMod.Paperwork</RootNamespace>
     <InformationalVersion>0.9.1</InformationalVersion>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="check.wav" />
+  </ItemGroup>
     <ItemGroup>
     <Content Include="info.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="check.wav" />
+    </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Krafs.Publicizer" Version="2.2.1" />
@@ -20,9 +26,11 @@
   <ItemGroup>
     <Reference Include="0Harmony" />
     <Reference Include="Assembly-CSharp" />
+    <Reference Include="DV.BrakeSystem" />
     <Reference Include="DV.Inventory" />
     <Reference Include="DV.ThingTypes" />
     <Reference Include="DV.Utils" />
+    <Reference Include="UnityEngine.AudioModule" />
     <Reference Include="UnityEngine.CoreModule" />
     <Reference Include="UnityModManager" />
     <Reference Include="WorldStreamer" />
