@@ -1,4 +1,5 @@
-﻿using DV.InventorySystem;
+﻿using DV.Booklets;
+using DV.InventorySystem;
 using DV.ThingTypes;
 using DvMod.Paperwork.Cache;
 using System.Collections.Generic;
@@ -25,8 +26,11 @@ namespace DvMod.Paperwork
                 IEnumerable<GameObject?> papers = jobs
                     .Select(job => job.State switch
                     {
-                        JobState.Available => JobOverviewCache.JobsToJobOverviews.TryGetValue(job, out var overview) ? overview.gameObject : null,
-                        JobState.InProgress => JobBooklet.allExistingJobBooklets.FirstOrDefault(x => x.job.ID == job.ID)?.gameObject,
+                        JobState.Available => JobOverviewCache.JobsToJobOverviews.TryGetValue(job, out var overview)
+                            ? overview.gameObject
+                            : BookletCreator.CreateJobOverview(job, PlayerManager.PlayerTransform.position, PlayerManager.PlayerTransform.rotation).gameObject,
+                        JobState.InProgress => JobBooklet.allExistingJobBooklets.FirstOrDefault(x => x.job.ID == job.ID)?.gameObject
+                            ?? BookletCreator.CreateJobBooklet(job, PlayerManager.PlayerTransform.position, PlayerManager.PlayerTransform.rotation).gameObject,
                     })
                     .Where(x => x != null);
 

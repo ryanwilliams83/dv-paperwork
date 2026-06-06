@@ -29,6 +29,7 @@
     <Reference Include="DV.BrakeSystem" />
     <Reference Include="DV.Inventory" />
     <Reference Include="DV.ThingTypes" />
+    <Reference Include="DV.UI" />
     <Reference Include="DV.Utils" />
     <Reference Include="UnityEngine.AudioModule" />
     <Reference Include="UnityEngine.CoreModule" />

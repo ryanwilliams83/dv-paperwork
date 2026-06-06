@@ -1,5 +1,4 @@
 using HarmonyLib;
-using UnityEngine;
 using UnityModManagerNet;
 
 namespace DvMod.Paperwork
@@ -25,24 +24,12 @@ namespace DvMod.Paperwork
             if (value)
             {
                 harmony.PatchAll();
-                PlayerManager.CarChanged += PlayerManager_CarChanged;
             }
             else
             {
-                PlayerManager.CarChanged -= PlayerManager_CarChanged;
                 harmony.UnpatchAll(modEntry.Info.Id);
             }
             return true;
-        }
-
-        private static void PlayerManager_CarChanged(TrainCar car)
-        {
-            if (car == null)
-                return;
-
-            Debug.Log($"Player changed to car: '{car.name}' in trainset: '{car.trainset.id}'");
-
-            Paperwork.GiveBookletsForTrainset(car.trainset);
         }
     }
 }
