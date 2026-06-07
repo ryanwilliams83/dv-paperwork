@@ -9,6 +9,8 @@ namespace DvMod.Paperwork.Patches
         [HarmonyPostfix]
         public static void SetCar_Postfix(PlayerManager __instance)
         {
+            Paperwork.LogTrace($"{nameof(PlayerManagerPatch)}.{nameof(SetCar_Postfix)}()");
+
             var car = PlayerManager.Car;
             if (car == null)
                 return;

@@ -11,6 +11,11 @@ namespace DvMod.Paperwork.Patches
         [HarmonyPostfix]
         public static void Merge_Postfix()
         {
+            if (!TrainsetCache.Enabled)
+                return;
+
+            Paperwork.LogTrace($"{nameof(TrainsetPatch)}.{nameof(Merge_Postfix)}()");
+
             TrainsetCache.Rebuild(JobsManager.Instance);
 
             var car = PlayerManager.Car;
@@ -22,6 +27,11 @@ namespace DvMod.Paperwork.Patches
         [HarmonyPostfix]
         public static void Split_Postfix()
         {
+            if (!TrainsetCache.Enabled)
+                return;
+
+            Paperwork.LogTrace($"{nameof(TrainsetPatch)}.{nameof(Split_Postfix)}()");
+
             TrainsetCache.Rebuild(JobsManager.Instance);
 
             var car = PlayerManager.Car;

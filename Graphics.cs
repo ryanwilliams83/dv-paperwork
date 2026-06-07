@@ -7,6 +7,8 @@ namespace DvMod.Paperwork
     {
         public static Texture2D Composite(Texture2D a, Texture2D b, float opacity)
         {
+            Paperwork.LogTrace($"{nameof(Graphics)}.{nameof(Composite)}()");
+
             if (a == null)
                 throw new ArgumentNullException(nameof(a));
 

@@ -6,11 +6,13 @@ namespace DvMod.Paperwork.Cache
 {
     public static class TrainsetCache
     {
+        public static bool Enabled = false;
+
         public static Dictionary<Trainset, List<Job>> TrainsetToJobs = new Dictionary<Trainset, List<Job>>();
 
         public static void Rebuild(JobsManager jobsManager)
         {
-            // Debug.Log($"{nameof(TrainsetCache)}.{nameof(Rebuild)}()");
+            Paperwork.LogTrace($"{nameof(TrainsetCache)}.{nameof(Rebuild)}()");
 
             TrainsetToJobs = Trainset.allSets
                 .ToDictionary(ts => ts, ts => jobsManager

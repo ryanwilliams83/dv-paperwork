@@ -10,6 +10,8 @@ namespace DvMod.Paperwork
 
         public static bool Load(UnityModManager.ModEntry modEntry)
         {
+            Paperwork.LogTrace($"{nameof(Main)}.{nameof(Load)}()");
+
             mod = modEntry;
 
             mod.OnToggle = OnToggle;
@@ -19,6 +21,8 @@ namespace DvMod.Paperwork
 
         private static bool OnToggle(UnityModManager.ModEntry modEntry, bool value)
         {
+            Paperwork.LogTrace($"{nameof(Main)}.{nameof(OnToggle)}()");
+
             Harmony harmony = new Harmony(modEntry.Info.Id);
 
             if (value)

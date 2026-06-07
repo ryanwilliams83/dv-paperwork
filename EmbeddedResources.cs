@@ -16,6 +16,8 @@ namespace DvMod.Paperwork
 
         public static Texture2D LoadPng(string resourceName, int width, int height)
         {
+            Paperwork.LogTrace($"{nameof(EmbeddedResources)}.{nameof(LoadPng)}()");
+
             var assembly = Assembly.GetExecutingAssembly();
             using var stream = assembly.GetManifestResourceStream(resourceName);
             if (stream == null)
@@ -32,6 +34,8 @@ namespace DvMod.Paperwork
 
         public static AudioClip LoadWav(string resourceName)
         {
+            Paperwork.LogTrace($"{nameof(EmbeddedResources)}.{nameof(LoadWav)}()");
+
             var assembly = Assembly.GetExecutingAssembly();
 
             using var stream = assembly.GetManifestResourceStream(resourceName);
@@ -47,6 +51,8 @@ namespace DvMod.Paperwork
 
         private static AudioClip WavToAudioClip(byte[] wavFile, string name)
         {
+            Paperwork.LogTrace($"{nameof(EmbeddedResources)}.{nameof(WavToAudioClip)}()");
+
             const int wavHeaderOffsetChannels = 22;
             const int wavHeaderOffsetSampleRate = 24;
             const int waveHeaderSize = 44;

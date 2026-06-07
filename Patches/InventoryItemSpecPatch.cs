@@ -7,11 +7,14 @@ namespace DvMod.Paperwork.Patches
     [HarmonyPatch(typeof(InventoryItemSpec))]
     public static class InventoryItemSpecPatch
     {
+        // WARNING - If you rename this method, the Patch will stop working
         [HarmonyPatch(typeof(InventoryItemSpec), nameof(InventoryItemSpec.ItemIconSprite), MethodType.Getter)]
         public static void Postfix(InventoryItemSpec __instance, ref Sprite __result)
         {
             if (__instance.GetComponent<JobBookletCheckmark>() == null)
                 return;
+
+            Paperwork.LogTrace($"{nameof(InventoryItemSpecPatch)}.{nameof(Postfix)}()");
 
             var texture = Graphics.Composite(__result.texture, EmbeddedResources.Assets.CheckPng.Value, 0.8f);
 

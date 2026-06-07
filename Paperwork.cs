@@ -18,8 +18,10 @@ namespace DvMod.Paperwork
     {
         private static int bookletsRunning;
 
-        public static void CheckJobBooklet(Job job)
+        public static void CheckJobBooklet(Job job, bool playSound)
         {
+            LogTrace($"{nameof(Paperwork)}.{nameof(CheckJobBooklet)}()");
+
             var booklet = JobBooklet.allExistingJobBooklets.FirstOrDefault(x => x.job.ID == job.ID)
                 ?? BookletCreator.CreateJobBooklet(job, PlayerManager.PlayerTransform.position, PlayerManager.PlayerTransform.rotation);
 
@@ -27,12 +29,16 @@ namespace DvMod.Paperwork
                 return;
 
             booklet.gameObject.GetOrAddComponent<JobBookletCheckmark>();
-            SfxHost.Instance.StartCoroutine(SfxHost.PlayOneShotDelayed(EmbeddedResources.Assets.CheckWav.Value, 2f));
+            if (playSound)
+                SfxHost.Instance.StartCoroutine(SfxHost.PlayOneShotDelayed(EmbeddedResources.Assets.CheckWav.Value, 2f));
+
             ForceInventoryRedraw(booklet.gameObject);
         }
 
-        private static void ForceInventoryRedraw(GameObject booklet)
+        public static void ForceInventoryRedraw(GameObject booklet)
         {
+            LogTrace($"{nameof(Paperwork)}.{nameof(ForceInventoryRedraw)}()");
+
             var inventory = SingletonBehaviour<Inventory>.Instance;
             if (inventory == null)
                 return;
@@ -58,6 +64,8 @@ namespace DvMod.Paperwork
 
         public static void GiveBookletsForTrainset(Trainset trainset)
         {
+            LogTrace($"{nameof(Paperwork)}.{nameof(GiveBookletsForTrainset)}()");
+
             try
             {
                 if (Interlocked.Exchange(ref bookletsRunning, 1) == 1)
@@ -92,6 +100,21 @@ namespace DvMod.Paperwork
             {
                 Interlocked.Exchange(ref bookletsRunning, 0);
             }
+        }
+
+        public static bool IsReadyToSubmit(Job? job)
+        {
+            return job != null
+                && job.State == JobState.InProgress
+                && job.tasks != null
+                && job.tasks.All(x => x.IsTaskCompleted());
+        }
+
+        public static void LogTrace(string message)
+        {
+            return;
+
+            Debug.Log(message);
         }
     }
 }

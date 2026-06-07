@@ -10,6 +10,8 @@ namespace DvMod.Paperwork.Patches
         [HarmonyPrefix]
         public static void DestroyJobOverview_Prefix(JobOverview __instance)
         {
+            Paperwork.LogTrace($"{nameof(JobOverviewPatch)}.{nameof(DestroyJobOverview_Prefix)}()");
+
             JobOverviewCache.JobsToJobOverviews.Remove(__instance.job);
         }
 
@@ -17,6 +19,8 @@ namespace DvMod.Paperwork.Patches
         [HarmonyPostfix]
         public static void Start_Postfix(JobOverview __instance)
         {
+            Paperwork.LogTrace($"{nameof(JobOverviewPatch)}.{nameof(Start_Postfix)}()");
+
             JobOverviewCache.JobsToJobOverviews.Add(__instance.job, __instance);
         }
     }
