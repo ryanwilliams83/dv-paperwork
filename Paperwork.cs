@@ -75,13 +75,14 @@ namespace DvMod.Paperwork
                     return;
 
                 IEnumerable<GameObject?> papers = jobs
-                    .Select(job => job.State switch
+                    .Select(job => job?.State switch
                     {
                         JobState.Available => JobOverviewCache.JobsToJobOverviews.TryGetValue(job, out var overview)
-                            ? overview.gameObject
-                            : BookletCreator.CreateJobOverview(job, PlayerManager.PlayerTransform.position, PlayerManager.PlayerTransform.rotation).gameObject,
+                            ? overview?.gameObject
+                            : BookletCreator.CreateJobOverview(job, PlayerManager.PlayerTransform.position, PlayerManager.PlayerTransform.rotation)?.gameObject,
                         JobState.InProgress => JobBooklet.allExistingJobBooklets.FirstOrDefault(x => x.job.ID == job.ID)?.gameObject
-                            ?? BookletCreator.CreateJobBooklet(job, PlayerManager.PlayerTransform.position, PlayerManager.PlayerTransform.rotation).gameObject,
+                            ?? BookletCreator.CreateJobBooklet(job, PlayerManager.PlayerTransform.position, PlayerManager.PlayerTransform.rotation)?.gameObject,
+                        _ => null
                     })
                     .Where(x => x != null);
 
@@ -112,7 +113,7 @@ namespace DvMod.Paperwork
 
         public static void LogTrace(string message)
         {
-            return;
+            // return;
 
             Debug.Log(message);
         }
