@@ -1,10 +1,14 @@
-﻿using DV.Logic.Job;
+﻿using DV.Booklets;
+using DV.Logic.Job;
+using DvMod.Paperwork.Behaviours;
+using DvMod.Paperwork.Cache;
 using HarmonyLib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using VLB;
 
 namespace DvMod.Paperwork.Patches
 {
@@ -13,11 +17,6 @@ namespace DvMod.Paperwork.Patches
     {
         private static readonly Dictionary<TrainCar, Action<(float value, bool forced)>> handbrakeChangedHandlers =
             new Dictionary<TrainCar, Action<(float value, bool forced)>>();
-
-        private static readonly Lazy<AudioClip> SfxCheck = new Lazy<AudioClip>(() =>
-        {
-            return EmbeddedAudioClips.LoadWavFromEmbeddedResource("DvMod.Paperwork.check.wav");
-        });
 
         [HarmonyPatch(typeof(TrainCar), nameof(TrainCar.Awake))]
         [HarmonyPostfix]
@@ -65,6 +64,14 @@ namespace DvMod.Paperwork.Patches
             var allTasksCompleted = job.tasks.All(x => x.IsTaskCompleted());
             Debug.Log($"Job: '{job.ID}' TasksCompleted: '{allTasksCompleted}'");
 
+            if (!allTasksCompleted)
+                return;
+
+            var booklet = JobBooklet.allExistingJobBooklets.FirstOrDefault(x => x.job.ID == job.ID)
+                ?? BookletCreator.CreateJobBooklet(job, PlayerManager.PlayerTransform.position, PlayerManager.PlayerTransform.rotation);
+
+            booklet.gameObject.GetOrAddComponent<JobBookletCheckmark>();
+
             SfxHost.Instance.StartCoroutine(PlaySoundDelayed());
         }
 
@@ -73,7 +80,7 @@ namespace DvMod.Paperwork.Patches
             yield return new WaitForSeconds(2f);
 
             var src = SfxHost.Instance.GetComponent<AudioSource>();
-            var sfx = SfxCheck.Value;
+            var sfx = EmbeddedResources.Assets.CheckWav.Value;
 
             const float volume = 1f;
             src.PlayOneShot(sfx, volume);
