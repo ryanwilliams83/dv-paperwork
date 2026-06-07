@@ -1,4 +1,5 @@
 ﻿using DV.Logic.Job;
+using DvMod.Paperwork.Cache;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
@@ -51,13 +52,14 @@ namespace DvMod.Paperwork.Patches
             if (value < 1f)
                 return;
 
-            var job = JobsManager.Instance.GetJobOfCar(car.logicCar, true);
-            if (job == null)
+            if (!TrainsetCache.TrainsetToJobs.TryGetValue(car.trainset, out var trainsetJobs))
                 return;
 
-            var allTasksCompleted = job.tasks.All(x => x.IsTaskCompleted());
-            if (allTasksCompleted)
-                Paperwork.CheckJobBooklet(job);
+            var completedJobs = trainsetJobs.Where(x => x.State == DV.ThingTypes.JobState.InProgress && x.tasks.All(task => task.IsTaskCompleted()));
+            foreach (var completedJob in completedJobs)
+            {
+                Paperwork.CheckJobBooklet(completedJob);
+            }
         }
     }
 }
