@@ -2,10 +2,12 @@
 using DV.InventorySystem;
 using DV.Logic.Job;
 using DV.ThingTypes;
+using DV.Utils;
 using DvMod.Paperwork.Behaviours;
 using DvMod.Paperwork.Cache;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using UnityEngine;
 using VLB;
@@ -26,6 +28,32 @@ namespace DvMod.Paperwork
 
             booklet.gameObject.GetOrAddComponent<JobBookletCheckmark>();
             SfxHost.Instance.StartCoroutine(SfxHost.PlayOneShotDelayed(EmbeddedResources.Assets.CheckWav.Value, 2f));
+            ForceInventoryRedraw(booklet.gameObject);
+        }
+
+        private static void ForceInventoryRedraw(GameObject booklet)
+        {
+            var inventory = SingletonBehaviour<Inventory>.Instance;
+            if (inventory == null)
+                return;
+
+            int slot = inventory.IndexOf(booklet);
+            if (!InventoryUtils.IsValidInventoryIndex(slot))
+                return;
+
+            bool isLocked = inventory.GetSlotLockState(slot);
+            bool isReserved = inventory.GetSlotReservedState(slot);
+            bool isDropped = inventory.GetSlotDroppedState(slot);
+
+            var itemState = isDropped
+                ? InventoryItemState.Dropped
+                : InventoryItemState.Disabled;
+
+            var slotState = new InventorySlotState(slot, booklet, itemState, isLocked, isReserved, -1);
+
+            var field = typeof(Inventory).GetField(nameof(Inventory.InventoryStatusChanged), BindingFlags.Instance | BindingFlags.NonPublic);
+            var del = field?.GetValue(inventory) as Inventory.InventoryStatusChangedDelegate;
+            del?.Invoke(slotState, InventoryActionType.Add, InventorySlotState.Empty, InventoryActionType.None);
         }
 
         public static void GiveBookletsForTrainset(Trainset trainset)
