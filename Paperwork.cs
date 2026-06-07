@@ -1,17 +1,32 @@
 ﻿using DV.Booklets;
 using DV.InventorySystem;
+using DV.Logic.Job;
 using DV.ThingTypes;
+using DvMod.Paperwork.Behaviours;
 using DvMod.Paperwork.Cache;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using UnityEngine;
+using VLB;
 
 namespace DvMod.Paperwork
 {
     public static class Paperwork
     {
         private static int bookletsRunning;
+
+        public static void CheckJobBooklet(Job job)
+        {
+            var booklet = JobBooklet.allExistingJobBooklets.FirstOrDefault(x => x.job.ID == job.ID)
+                ?? BookletCreator.CreateJobBooklet(job, PlayerManager.PlayerTransform.position, PlayerManager.PlayerTransform.rotation);
+
+            if (booklet.GetComponent<JobBookletCheckmark>() != null)
+                return;
+
+            booklet.gameObject.GetOrAddComponent<JobBookletCheckmark>();
+            SfxHost.Instance.StartCoroutine(SfxHost.PlayOneShotDelayed(EmbeddedResources.Assets.CheckWav.Value, 2f));
+        }
 
         public static void GiveBookletsForTrainset(Trainset trainset)
         {

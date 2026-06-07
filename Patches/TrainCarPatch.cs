@@ -1,14 +1,8 @@
-﻿using DV.Booklets;
-using DV.Logic.Job;
-using DvMod.Paperwork.Behaviours;
-using DvMod.Paperwork.Cache;
+﻿using DV.Logic.Job;
 using HarmonyLib;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
-using VLB;
 
 namespace DvMod.Paperwork.Patches
 {
@@ -53,37 +47,17 @@ namespace DvMod.Paperwork.Patches
 
         private static void OnHandbrakePositionChanged(TrainCar car, float value, bool forced)
         {
+            // Debug.Log($"Handbrake changed on '{car.logicCar.ID}', value={value}, forced={forced}");
             if (value < 1f)
                 return;
 
-            // Debug.Log($"Handbrake applied on '{car.logicCar.ID}', value={value}, forced={forced}");
             var job = JobsManager.Instance.GetJobOfCar(car.logicCar, true);
             if (job == null)
                 return;
 
             var allTasksCompleted = job.tasks.All(x => x.IsTaskCompleted());
-            Debug.Log($"Job: '{job.ID}' TasksCompleted: '{allTasksCompleted}'");
-
-            if (!allTasksCompleted)
-                return;
-
-            var booklet = JobBooklet.allExistingJobBooklets.FirstOrDefault(x => x.job.ID == job.ID)
-                ?? BookletCreator.CreateJobBooklet(job, PlayerManager.PlayerTransform.position, PlayerManager.PlayerTransform.rotation);
-
-            booklet.gameObject.GetOrAddComponent<JobBookletCheckmark>();
-
-            SfxHost.Instance.StartCoroutine(PlaySoundDelayed());
-        }
-
-        private static IEnumerator PlaySoundDelayed()
-        {
-            yield return new WaitForSeconds(2f);
-
-            var src = SfxHost.Instance.GetComponent<AudioSource>();
-            var sfx = EmbeddedResources.Assets.CheckWav.Value;
-
-            const float volume = 1f;
-            src.PlayOneShot(sfx, volume);
+            if (allTasksCompleted)
+                Paperwork.CheckJobBooklet(job);
         }
     }
 }
